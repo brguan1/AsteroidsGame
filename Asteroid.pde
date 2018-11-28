@@ -1,64 +1,40 @@
 class Asteroid extends Floater
 {
-	private int myNumber;
+	private int rotSpeed;
 	public Asteroid()
 	{
-		 myNumber = (int)(Math.random()*11)-5;
+		 rotSpeed = (int)(Math.random()*11)-5;
 		 myColor = 150;    
 	  	 myCenterX = (double)(Math.random()*1000)+100; 
 	  	 myCenterY = (double)(Math.random()*700)+100;  
 	  	 myDirectionX = 0;
 	  	 myDirectionY = 0;
 	  	 myPointDirection = 0;  
-	     corners = 9; 
+	     corners = 8; 
 	     xCorners = new int[corners];
 	     yCorners = new int[corners];
-		 xCorners[0] = 10;
-	     yCorners[0] = 0;
-	     xCorners[1] = 4;
-	     yCorners[1] = 4;
+		 xCorners[0] = -5;
+	     yCorners[0] = -20;
+	     xCorners[1] = 15;
+	     yCorners[1] = -15;
 	     xCorners[2] = 20;
-	     yCorners[2] = 4;
-	     xCorners[3] = -6;
-	     yCorners[3] = 10;
-	     xCorners[4] = -14;
-	     yCorners[4] = 4;
-	     xCorners[5] = -14;
-	     yCorners[5] = -4;
-	     xCorners[6] = -6;
-	     yCorners[6] = -10;
-	     xCorners[7] = 20;
-	     yCorners[7] = -4;
-	     xCorners[8] = 4;
-	     yCorners[8] = -4;
+	     yCorners[2] = 0;
+	     xCorners[3] = 20;
+	     yCorners[3] = 15;
+	     xCorners[4] = 5;
+	     yCorners[4] = 20;
+	     xCorners[5] = -15;
+	     yCorners[5] = 18;
+	     xCorners[6] = -25;
+	     yCorners[6] = 10;
+	     xCorners[7] = -25;
+	     yCorners[7] = -10;
 	}
 
 public void move ()   //move the floater in the current direction of travel
   {      
-    //change the x and y coordinates by myDirectionX and myDirectionY       
-    myCenterX += myDirectionX;    
-    myCenterY += myDirectionY;     
-
-    //wrap around screen    
-    if(myCenterX >width)
-    {     
-      myCenterX = 0;    
-    }    
-    else if (myCenterX<0)
-    {     
-      myCenterX = width;    
-    }    
-    if(myCenterY >height)
-    {    
-      myCenterY = 0;    
-    } 
-    
-    else if (myCenterY < 0)
-    {     
-      myCenterY = height;    
-    }   
-
-    myPointDirection+=myNumber;
+  	turn(rotSpeed);
+  	super.move();
   }   
 
    public void setX(int x){ myCenterX = x;}  
