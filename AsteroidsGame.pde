@@ -12,6 +12,7 @@ boolean firing = false;
 int cooldown = 60;
 boolean cooldownNull = true;
 boolean spawnRateThing = false;
+boolean debuggy = true;
 public void setup() 
 {
   size(1200,900);
@@ -53,7 +54,10 @@ if(isHit == true)
 			health.setHealth(health.getHealth()-21);
 			isHit = false;
 		}
+if (debuggy == true)
+{
  debug();
+}
 }
 
 public void keyPressed()
@@ -63,6 +67,8 @@ public void keyPressed()
 	if(key == 'd'){isRotatingRight = true;}
 	if(key == ' '){firing = true;}
 	if(key == 'h' && cooldownNull == true){isHyperspace = true;}
+	if(key == 'm' && debuggy == true){debuggy = false;}
+	else if(key == 'm' && debuggy == false){debuggy = true;}
 }
 
 public void keyReleased()
