@@ -13,6 +13,8 @@ int cooldown = 60;
 boolean cooldownNull = true;
 boolean spawnRateThing = false;
 boolean debuggy = true;
+boolean typeOne = true;
+boolean infHealth = false;
 public void setup() 
 {
   size(1200,900);
@@ -43,15 +45,23 @@ public void draw()
   	 	placeholder.show();
   	 	placeholder.move();
   }
-  if (shots.size()>10)
-  	shots.remove(0);
+   for(int i=0; i<shots.size();i++){
+  	shots.get(i).show();
+  	shots.get(i).move();
+  }
+ weaponTypes();
  shipMotion();
  collision();
  addrock();
  stats();
-if(isHit == true)
+if(isHit == true && infHealth == false)
 		{
 			health.setHealth(health.getHealth()-21);
+			isHit = false;
+		} else {
+			int derp = health.getHealth();
+			health.setHealth(health.getHealth()-21);
+			health.setHealth(derp);
 			isHit = false;
 		}
 if (debuggy == true)
@@ -69,6 +79,15 @@ public void keyPressed()
 	if(key == 'h' && cooldownNull == true){isHyperspace = true;}
 	if(key == 'm' && debuggy == true){debuggy = false;}
 	else if(key == 'm' && debuggy == false){debuggy = true;}
+	if(key == 'q'){typeOne = true;}
+	if(key == 'e'){typeOne = false;}
+	if(key == 'i' && infHealth == false)
+		{
+			health.setHealth(20999987);
+			infHealth = true;
+		} else if (key == 'i' && infHealth == true){
+			infHealth = false;
+		}
 }
 
 public void keyReleased()
@@ -95,11 +114,6 @@ public void shipMotion()
   if(isRotatingRight == true)myBattleship.turn(5);
   if(firing == true){
   	    shots.add(new Bullet(myBattleship));
-    for(int i=0; i<shots.size();i++){
-  	shots.get(i).show();
-  	shots.get(i).move();
-  	shots.get(i).accelerate(10);
-  }
   }
 
 }
@@ -110,7 +124,13 @@ public void debug()
   text("X-coordinate = " + myBattleship.getX(), 30, 30, 30);
   text("Y-coordinate = " + myBattleship.getY(), 30, 50, 30);
   text("Point Direction = " + myBattleship.getPointDirection(), 30, 70, 30);
-  text("health = " + ((int)((health.getHealth()+10)/2.1)) ,30 ,90 ,30);
+  if (typeOne == true)
+  {
+  	text("weapon: normal" ,30 ,90 ,30);
+  } else {
+  	text("weapon: whip" ,30 ,90 ,30);
+  }
+  text("health = " + ((int)((health.getHealth()+10)/2.1)) ,30 ,110 ,30);
 }
 
 public void stats() 
@@ -166,6 +186,11 @@ public void collision()
 			isHit = true;
 		}
 	}
+	for (int i=0; i < shots.size(); i++)
+	{
+		if (shots.get(i).getX() > 1190|| shots.get(i).getX() < 10 || shots.get(i).getY() > 890 || shots.get(i).getY() < 10)
+			shots.remove(i);
+	}
 }
 
 public void addrock()
@@ -177,4 +202,21 @@ public void addrock()
 		theRock.add(new Asteroid());
 		spawnRateThing = false;
 	}
+}
+
+public void weaponTypes()
+{
+	if (typeOne == true)
+	{
+		   for(int i=0; i<shots.size();i++){
+		  	shots.get(i).accelerate(0.5);
+		  }
+ } else {
+ 	   for(int i=0; i<shots.size();i++){
+ 	  	shots.get(i).accelerate(10);
+ 	  }
+ 	if (shots.size() == 10)
+ 		shots.remove(0);
+ }
+
 }
