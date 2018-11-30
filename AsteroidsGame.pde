@@ -22,6 +22,7 @@ public void setup()
   for (int i = 0; i<11; i++)
   {
   	theRock.add(new Asteroid());
+  	theRock.get(i).accelerate(Math.random()*5-0.5);
   }
   art = new Star[100];
  for (int i = 0; i<art.length; i++)
@@ -60,7 +61,7 @@ if(isHit == true && infHealth == false)
 			isHit = false;
 		} else {
 			int derp = health.getHealth();
-			health.setHealth(health.getHealth()-21);
+			health.setHealth(derp-21);
 			health.setHealth(derp);
 			isHit = false;
 		}
@@ -172,7 +173,6 @@ public void collision()
 		{
 			theRock.remove(n);
 			shots.remove(i);
-			spawnRateThing = true;
 			break;
 		}
 		}
@@ -182,7 +182,11 @@ public void collision()
 		if(dist(myBattleship.getX(), myBattleship.getY(), theRock.get(i).getX(), theRock.get(i).getY()) < 20)
 		{
 			theRock.remove(i);
-			spawnRateThing = true;
+			int help = (int)(Math.random()*5);
+			if (help < 3)
+			{
+				spawnRateThing = true;
+			}
 			isHit = true;
 		}
 	}
@@ -195,13 +199,19 @@ public void collision()
 
 public void addrock()
 {
-	if(cooldown == second())
-	theRock.add(new Asteroid());
-	if(spawnRateThing == true)
+	int bob = 0;
+	if(cooldown == 0 ||cooldown == 20||cooldown == 40|| cooldown == 60)
 	{
-		theRock.add(new Asteroid());
-		spawnRateThing = false;
+		spawnRateThing = true;
+	if (spawnRateThing == true && bob == 0)
+	{
+	theRock.add(0, new Asteroid());
+    theRock.get(0).accelerate(Math.random()*5-0.5);
+    spawnRateThing = false;
+    bob = 1;
 	}
+	}
+	bob = 0;
 }
 
 public void weaponTypes()
