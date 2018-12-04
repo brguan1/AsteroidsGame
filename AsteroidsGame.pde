@@ -10,11 +10,20 @@ boolean isHyperspace = false;
 boolean isHit = false;
 boolean firing = false;
 int cooldown = 60;
+int bob = 0;
 boolean cooldownNull = true;
 boolean spawnRateThing = false;
 boolean debuggy = true;
 boolean typeOne = true;
 boolean infHealth = false;
+boolean spawnType = true;
+boolean unlocked = false;
+boolean partOne = false;
+boolean partTwo = false;
+boolean partThree = false;
+boolean partFour = false;
+boolean complete = false;
+
 public void setup() 
 {
   size(1200,900);
@@ -53,7 +62,12 @@ public void draw()
  weaponTypes();
  shipMotion();
  collision();
+ if (spawnType == true)
+ {
  addrock();
+} else {
+ addrockTwo();
+}
  stats();
 if(isHit == true && infHealth == false)
 		{
@@ -69,6 +83,12 @@ if (debuggy == true)
 {
  debug();
 }
+ if (unlocked == true)
+ {
+ 	textSize(30);
+ 	text("Infinite Health Unlocked" ,425 ,450, 425, 450);
+ 	text("Press 'I' to enable" ,475 ,480);
+ }
 }
 
 public void keyPressed()
@@ -82,6 +102,14 @@ public void keyPressed()
 	else if(key == 'm' && debuggy == false){debuggy = true;}
 	if(key == 'q'){typeOne = true;}
 	if(key == 'e'){typeOne = false;}
+	if(key == 'z'){partOne = true;}
+	if(key == 'x'){partTwo = true;}
+	if(key == 'c') {partThree = true;}
+	if(key == 'v'){partFour = true;}
+	if(partOne == true && partTwo == true &&partThree == true &&partFour == true){complete = true;}
+	if (complete == true){unlocked = true;}
+	if (unlocked == true)
+	{
 	if(key == 'i' && infHealth == false)
 		{
 			health.setHealth(20999987);
@@ -89,6 +117,9 @@ public void keyPressed()
 		} else if (key == 'i' && infHealth == true){
 			infHealth = false;
 		}
+	}
+	if(key == 'u' && spawnType == true){spawnType = false;}
+	else if(key == 'u' && spawnType == false){spawnType = true;}
 }
 
 public void keyReleased()
@@ -122,6 +153,7 @@ public void shipMotion()
 public void debug()
 {
   fill(255);                                                    //this is the debug menu.
+  textSize(11);
   text("X-coordinate = " + myBattleship.getX(), 30, 30, 30);
   text("Y-coordinate = " + myBattleship.getY(), 30, 50, 30);
   text("Point Direction = " + myBattleship.getPointDirection(), 30, 70, 30);
@@ -132,6 +164,12 @@ public void debug()
   	text("weapon: whip" ,30 ,90 ,30);
   }
   text("health = " + ((int)((health.getHealth()+10)/2.1)) ,30 ,110 ,30);
+  if (spawnType == true)
+  {
+  	text("rock spawn: normal" ,30 ,130 ,30);
+  } else {
+  	text("rock spawn: burst" ,30 ,130 ,30);
+  }
 }
 
 public void stats() 
@@ -199,8 +237,7 @@ public void collision()
 
 public void addrock()
 {
-	int bob = 0;
-	if(cooldown == 0 ||cooldown == 20||cooldown == 40|| cooldown == 60)
+	if(cooldown%2 == 0)
 	{
 		spawnRateThing = true;
 	if (spawnRateThing == true && bob == 0)
@@ -211,9 +248,25 @@ public void addrock()
     bob = 1;
 	}
 	}
-	bob = 0;
+	if (cooldown%2 != 0)
+		bob = 0;
 }
 
+public void addrockTwo()
+{
+	if(cooldown%5 == 0)
+	{
+		spawnRateThing = true;
+	if (spawnRateThing == true && bob == 0)
+	{
+	theRock.add(0, new Asteroid());
+    theRock.get(0).accelerate(Math.random()*5-0.5);
+    spawnRateThing = false;
+    bob = 1;
+	}
+	}
+		bob = 0;
+}
 public void weaponTypes()
 {
 	if (typeOne == true)
