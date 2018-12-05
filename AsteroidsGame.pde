@@ -11,6 +11,7 @@ boolean isHit = false;
 boolean firing = false;
 int cooldown = 60;
 int bob = 0;
+int remember = 0;
 boolean cooldownNull = true;
 boolean spawnRateThing = false;
 boolean debuggy = true;
@@ -23,6 +24,7 @@ boolean partTwo = false;
 boolean partThree = false;
 boolean partFour = false;
 boolean complete = false;
+boolean allowthistoturnoff = false;
 
 public void setup() 
 {
@@ -72,6 +74,7 @@ public void draw()
 if(isHit == true && infHealth == false)
 		{
 			health.setHealth(health.getHealth()-21);
+			remember = health.getHealth();
 			isHit = false;
 		} else {
 			int derp = health.getHealth();
@@ -83,11 +86,12 @@ if (debuggy == true)
 {
  debug();
 }
- if (unlocked == true)
+ if (unlocked == true && allowthistoturnoff == false)
  {
  	textSize(30);
- 	text("Infinite Health Unlocked" ,425 ,450, 425, 450);
- 	text("Press 'I' to enable" ,475 ,480);
+ 	
+ 	text("Infinite Health Unlocked" ,425 ,450);
+ 	text("Press 'I' to enable" ,475 ,520);
  }
 }
 
@@ -98,6 +102,8 @@ public void keyPressed()
 	if(key == 'd'){isRotatingRight = true;}
 	if(key == ' '){firing = true;}
 	if(key == 'h' && cooldownNull == true){isHyperspace = true;}
+	//if (key == 'r'&& cooldownNull == true){cooldownNull = false;}
+	/*else*/ if (key == 'r'&& cooldownNull == false){cooldownNull = true;}
 	if(key == 'm' && debuggy == true){debuggy = false;}
 	else if(key == 'm' && debuggy == false){debuggy = true;}
 	if(key == 'q'){typeOne = true;}
@@ -114,8 +120,11 @@ public void keyPressed()
 		{
 			health.setHealth(20999987);
 			infHealth = true;
+			allowthistoturnoff = true;
 		} else if (key == 'i' && infHealth == true){
+			health.setHealth(remember);
 			infHealth = false;
+			allowthistoturnoff = true;
 		}
 	}
 	if(key == 'u' && spawnType == true){spawnType = false;}
@@ -138,6 +147,8 @@ public void shipMotion()
     {
 		myBattleship.setX((int)(Math.random()*1199)+1);
 		myBattleship.setY((int)(Math.random()*899)+1);
+		myBattleship.setDirectionX(0);
+		myBattleship.setDirectionY(0);
 		isHyperspace = false;
 		cooldownNull = false;
 	}
@@ -170,6 +181,19 @@ public void debug()
   } else {
   	text("rock spawn: burst" ,30 ,130 ,30);
   }
+  if(cooldownNull == true)
+  {
+  	text("hyperspace-status: ready",30 ,150, 30);
+  } else {
+  	text("hyperspace-status: loading",30 ,150, 30);
+  }
+
+  text("Debug Controls:", 1000, 30, 30);
+  text("q & e for weapons", 1000, 50, 30);
+  text("r to skip hyperspace cooldown", 1000, 70, 30);
+  text("u for changing rock spawn type", 1000, 90, 30);
+  text("m for toggle debug menu", 1000, 110, 30);
+  if(unlocked == true){text("i for infinite health", 1000, 130, 30);}
 }
 
 public void stats() 
