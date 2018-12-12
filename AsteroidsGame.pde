@@ -2,6 +2,8 @@ Floater myBattleship;
 HealthBar health = new HealthBar(10,300);
 ArrayList <Asteroid> theRock = new ArrayList <Asteroid>();
 ArrayList <Bullet> shots = new ArrayList <Bullet>();
+ArrayList <Double> speedX = new ArrayList <Double>();
+ArrayList <Double> speedY = new ArrayList <Double>();
 Star[] art;
 boolean isAccelerating = false; //sorry i copied your variables to make the controls smoother :9
 boolean isRotatingLeft = false;
@@ -25,6 +27,8 @@ boolean partThree = false;
 boolean partFour = false;
 boolean complete = false;
 boolean allowthistoturnoff = false;
+boolean timestop = false;
+int timer = 5;
 
 public void setup() 
 {
@@ -129,6 +133,18 @@ public void keyPressed()
 	}
 	if(key == 'u' && spawnType == true){spawnType = false;}
 	else if(key == 'u' && spawnType == false){spawnType = true;}
+
+	if(key == 't' && timestop == false){timestop = true;}
+	else if(key == 't' && timestop == true)
+		{
+			for (int i = 0; i < theRock.size(); i++)
+			{
+			theRock.get(i).accelerate(Math.random()*5-0.5);
+			theRock.get(i).setRotSpeed((int)(Math.random()*11)-5);
+	 		}
+	 		for (int n = 0; n < shots.size(); n++){shots.get(n).accelerate(.1);}
+	 			timestop = false;
+	 	}
 }
 
 public void keyReleased()
@@ -197,8 +213,40 @@ public void debug()
 }
 
 public void stats() 
-{                     //planning to put a health bar here and maybe a cooldown timer if i figure out how to make it
+{                     //no longer jsut stats
 	 health.show();
+	 if (timestop == true)
+	 {
+	 	for (int i = 0; i < theRock.size(); i++)
+	 	{
+	 		speedX.add(theRock.get(i).getDirectionX());
+	 		speedY.add(theRock.get(i).getDirectionY());
+	 		theRock.get(i).setDirectionX(0);
+	 		theRock.get(i).setDirectionY(0);
+	 		theRock.get(i).setRotSpeed(0);
+	 	}
+	 	for (int i = timer; i > 0; i--)
+	 	{
+	 		if (i < 0)
+	 		{
+	 			theRock.get(i).setDirectionX(speedX.get(0));
+	 			theRock.get(i).setDirectionY(speedY.get(0));
+	 			for (int n = 0; n < shots.size(); n++){shots.get(n).accelerate(.1);}
+	 			speedX.remove(0);
+	 			speedY.remove(0);
+	 			timestop = false;
+	 		} else {
+	 			for (int n = 0; n < shots.size(); n++)
+	 			{
+	 				shots.get(n).setDirectionX(0);
+	 	  		shots.get(n).setDirectionY(0);
+
+	 			}
+	 		}
+	 	}
+
+	 }
+	 
 }
 
 public class HealthBar

@@ -47,4 +47,5 @@ public void move ()   //move the floater in the current direction of travel
    public double getDirectionY(){return myDirectionY;}   
    public void setPointDirection(int degrees){myPointDirection = degrees;}   
    public double getPointDirection(){return myPointDirection;} 
+   public void setRotSpeed(int x){rotSpeed = x;}
 }
